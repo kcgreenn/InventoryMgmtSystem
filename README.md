@@ -1,3 +1,3 @@
 # InventoryMgmtSystem
 
-![InvMgmtSys](https://ibb.co/H4BXzX4)
+![InvMgmtSys](https://i.ibb.co/V9J3S39/Inv-Mgmt-Sys.png)
