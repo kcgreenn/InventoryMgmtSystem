@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="518.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddProductController">
+   <children>
+      <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Product">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Text>
+      <Label layoutX="48.0" layoutY="70.0" text="ID" />
+      <TextField fx:id="productIdField" editable="false" layoutX="120.0" layoutY="70.0" prefHeight="25.0" prefWidth="203.0" promptText="Auto-Gen/Disabled" />
+      <Label layoutX="48.0" layoutY="120.0" text="Name" />
+      <TextField fx:id="productNameField" layoutX="120.0" layoutY="120.0" onKeyPressed="#handleProductNameInput" prefWidth="203.0" />
+      <Label layoutX="48.0" layoutY="220.0" text="Inv" />
+      <TextField fx:id="productPriceField" layoutX="120.0" layoutY="170.0" onKeyPressed="#handleProductPriceInput" prefWidth="203.0" />
+      <Label layoutX="48.0" layoutY="170.0" text="Price" />
+      <TextField fx:id="productInvField" layoutX="120.0" layoutY="220.0" onKeyPressed="#handleProductInvInput" prefWidth="203.0" />
+      <Label layoutX="48.0" layoutY="270.0" text="Min" />
+      <TextField fx:id="productMinField" layoutX="120.0" layoutY="270.0" onKeyPressed="#handleProductMinInput" prefWidth="50.0" />
+      <Label layoutX="201.0" layoutY="270.0" text="Max" />
+      <TextField fx:id="productMaxField" layoutX="273.0" layoutY="270.0" onKeyPressed="#handleProductMaxInput" prefWidth="50.0" />
+      <TableView fx:id="partSearchTable" layoutX="370.0" layoutY="70.0" prefHeight="144.0" prefWidth="358.0">
+        <columns>
+          <TableColumn prefWidth="57.0" text="Part ID" />
+          <TableColumn prefWidth="79.0" text="Part Name" />
+            <TableColumn prefWidth="94.0" text="Inventory Level" />
+            <TableColumn prefWidth="127.0" text="Price/Cost Per Unit" />
+        </columns>
+      </TableView>
+      <TextField fx:id="partSearchField" layoutX="561.0" layoutY="31.0" onKeyPressed="#handlePartSearchInput" prefHeight="25.0" prefWidth="165.0" promptText="Search By Part ID Or Name" />
+      <TableView fx:id="associatedPartsTable" layoutX="370.0" layoutY="262.0" prefHeight="144.0" prefWidth="358.0">
+         <columns>
+            <TableColumn prefWidth="57.0" text="Part ID" />
+            <TableColumn prefWidth="79.0" text="Part Name" />
+            <TableColumn prefWidth="94.0" text="Inventory Level" />
+            <TableColumn prefWidth="127.0" text="Price/Cost Per Unit" />
+         </columns>
+      </TableView>
+      <Button fx:id="addPartButton" layoutX="563.0" layoutY="228.0" mnemonicParsing="false" onMouseClicked="#handleAddPart" prefHeight="25.0" prefWidth="165.0" text="Add Associated Part" />
+      <Button fx:id="removePartButton" layoutX="563.0" layoutY="419.0" mnemonicParsing="false" onMouseClicked="#handleRemovePart" prefHeight="25.0" prefWidth="165.0" text="Remove Associated Part" />
+      <ButtonBar layoutX="542.0" layoutY="464.0" prefHeight="40.0" prefWidth="184.0">
+        <buttons>
+          <Button fx:id="saveButton" mnemonicParsing="false" onMouseClicked="#handleSave" text="Save" />
+            <Button fx:id="cancelButton" layoutX="135.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#handleCancel" text="Cancel" />
+        </buttons>
+      </ButtonBar>
+      <Line endX="660.0" layoutX="40.0" layoutY="458.0" />
+      <Text layoutX="370.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Associated Parts">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

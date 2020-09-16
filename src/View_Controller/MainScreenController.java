@@ -9,6 +9,7 @@ import Model.Inventory;
 import Model.Part;
 import Model.Product;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -60,9 +61,6 @@ public class MainScreenController implements Initializable {
     private TableColumn<Product, Integer> productInvCol;
     @FXML
     private TableColumn<Product, Double> productPriceCol;
-    
-    private ObservableList<Part> partsInventory = FXCollections.observableArrayList();
-    private ObservableList<Product> productsInventory = FXCollections.observableArrayList();
     @FXML
     private TableColumn<Part, Integer> partIdCol;
     @FXML
@@ -71,13 +69,16 @@ public class MainScreenController implements Initializable {
     private TableColumn<Part, Integer> partInvCol;
     @FXML
     private TableColumn<Part, Double> partPriceCol;
-
+    
+    private ObservableList<Part> partsInventory = FXCollections.observableArrayList();
+    private ObservableList<Product> productsInventory = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Generate tables on initialize
         generatePartsTable();
         generateProductsTable();
     }    
@@ -112,7 +113,16 @@ public class MainScreenController implements Initializable {
     
     @FXML
     private void handleSearchPart(KeyEvent event) {
-        Inventory.lookupPart(Integer.parseInt(partSearchField.getText()));
+        String searchInput = partSearchField.getText();
+        // Try to search by ID if input is an integer, otherwise search by name
+        try{
+            partsInventory.setAll(Inventory.lookupPart(Integer.parseInt(searchInput)));
+        }catch(NumberFormatException nfe){
+            partsInventory.setAll(Inventory.lookupPart(searchInput));
+        }
+
+        partsTable.setItems(partsInventory);
+        partsTable.refresh();
     }
 
     @FXML
@@ -128,11 +138,28 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void handleDeletePart(MouseEvent event) {
+        // Find selected part and delete
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+        Inventory.deletePart(selectedPart);
         
+        // Refresh Table
+        partsInventory.setAll(Inventory.getAllParts());
+        partsTable.setItems(partsInventory);
+        partsTable.refresh();
     }
 
     @FXML
     private void handleSearchProduct(KeyEvent event) {
+        String searchInput = productSearchField.getText();
+        // Try to search by ID if input is an integer, otherwise search by name
+        try{            
+            productsInventory.setAll(Inventory.lookupProduct(Integer.parseInt(searchInput)));
+        }catch(NumberFormatException nfe){
+            productsInventory.setAll(Inventory.lookupProduct(searchInput));
+        }
+        
+        productsTable.setItems(productsInventory);
+        productsTable.refresh();
     }
 
     @FXML
@@ -147,6 +174,13 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void handleDeleteProduct(MouseEvent event) {
+        // Find and delete selected product
+        Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
+        Inventory.deleteProduct(selectedProduct);
+        // Refresh table
+        productsInventory.setAll(Inventory.getAllProducts());
+        productsTable.setItems(productsInventory);
+        productsTable.refresh();
     }
 
     @FXML

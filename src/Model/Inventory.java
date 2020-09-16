@@ -23,19 +23,41 @@ public class Inventory {
         allProducts.add(product);
     }
     public static Part lookupPart(int partId){
-        int index = allParts.indexOf(partId);
-        return allParts.get(index);
+        Part match = null;
+        for(Part p : allParts){
+            if(p.getId() == partId){
+                match = p;
+            }
+        }
+        return match;
     }
     public static Product lookupProduct(int productId){
-        int index = allProducts.indexOf(productId);
-        return allProducts.get(index);
+        Product match = null;
+        for(Product p : allProducts){
+            if(p.getId() == productId){
+                match = p;
+            }
+        }
+        return match;
     }
-//    public static ObservableList<Part> lookupPart(String partName){
-//
-//    }
-//    public static Product lookupProduct(String productName){
-//      
-//    }
+    public static ObservableList<Part> lookupPart(String partName){
+        ObservableList<Part> partMatches = FXCollections.observableArrayList();
+        for(Part p : allParts){
+            if(p.getName().toLowerCase().contains(partName.toLowerCase())){
+                partMatches.add(p);
+            }
+        }
+        return partMatches;
+    }
+    public static ObservableList<Product> lookupProduct(String productName){
+      ObservableList<Product> productMatches = FXCollections.observableArrayList();
+      for(Product p : allProducts){
+          if(p.getName().toLowerCase().contains(productName.toLowerCase())){
+              productMatches.add(p);
+          }
+      }
+      return productMatches;
+    }
     public static void updatePart(int index, Part selectedPart){
         allParts.set(index, selectedPart);
     }

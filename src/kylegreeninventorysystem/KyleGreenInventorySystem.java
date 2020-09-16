@@ -22,9 +22,16 @@ import javafx.stage.Stage;
 public class KyleGreenInventorySystem extends Application {
     
     @Override
-    public void start(Stage stage) throws Exception {
-        // Generate test data
+    public void init() throws Exception {
+        
+    // Generate test data
         addTestData();
+        Inventory.lookupPart(1);
+//        System.out.print(Inventory.lookupPart(1));
+    }
+    
+    @Override
+    public void start(Stage stage) throws Exception {
         
         Parent root = FXMLLoader.load(getClass().getResource("/View_Controller/MainScreen.fxml"));
         
@@ -34,7 +41,7 @@ public class KyleGreenInventorySystem extends Application {
         stage.setResizable(false);
         stage.show();
     }
-
+    
     /**
      * @param args the command line arguments
      */
