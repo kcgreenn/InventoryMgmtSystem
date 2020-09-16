@@ -98,6 +98,6 @@ public class Inventory {
     @return Whether the inv is valid
     */
     public static boolean validateInvLevel(int inv, int min, int max){
-        return inv > min && inv < max;
+        return inv >= min && inv <= max;
     }
 }

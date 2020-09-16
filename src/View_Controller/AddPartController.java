@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -61,6 +62,8 @@ public class AddPartController implements Initializable {
     
     Stage stage;
     Parent scene;
+    @FXML
+    private Label warningLabel;
     enum SelectedPartType {
         INHOUSE,
         OUTSOURCED
@@ -104,14 +107,6 @@ public class AddPartController implements Initializable {
     @FXML
     private void handleVariableInput(KeyEvent event) {
     }
-    @FXML
-    private void handleMachineIdInput(KeyEvent event){
-        
-    }
-    @FXML
-    private void handleCompanyNameInput(KeyEvent event){
-        
-    }
 
 
     @FXML
@@ -136,9 +131,9 @@ public class AddPartController implements Initializable {
         int newPartInv = Integer.parseInt(partInvTextField.getText());
         int newPartMin = Integer.parseInt(partMinTextField.getText());
         int newPartMax = Integer.parseInt(partMaxTextField.getText());
+
         // Validate inventory level before adding part to inventory
-//        System.out.print(Inventory.validateInvLevel(newPartInv, newPartMin, newPartMax));
-//        if(Inventory.validateInvLevel(newPartInv, newPartMin, newPartMax)){
+        if(Inventory.validateInvLevel(newPartInv, newPartMin, newPartMax)){
             if(selectedPartType == SelectedPartType.INHOUSE){
                 int newPartMachineId = Integer.parseInt(variableTextField.getText());
                 Inventory.addPart(new InhousePart(newPartId, newPartName, newPartPrice, newPartInv, newPartMin, newPartMax, newPartMachineId));
@@ -147,16 +142,17 @@ public class AddPartController implements Initializable {
                 Inventory.addPart(new OutsourcedPart(newPartId, newPartName, newPartPrice, newPartInv, newPartMin, newPartMax, newPartCompanyName));
             }
             Inventory.incrementPartId();
-//        } else{
-//            System.out.print("Error: Inventory level must be between the minimum and maximum.");
-//        }
-
-        // Return to main screen
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View_Controller/MainScreen.fxml"));
+            
+            // Return to main screen
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View_Controller/MainScreen.fxml"));
         
-        stage.setScene(new Scene(scene));
-        stage.show();
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } else{
+            partInvTextField.setStyle("-fx-border-color: #f00");
+            warningLabel.setText("Error: Inventory level must be between minimum and maximum.");
+        }
     }
 
     @FXML

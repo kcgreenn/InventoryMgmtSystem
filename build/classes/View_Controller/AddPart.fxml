@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="454.0" prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddPartController">
+<AnchorPane id="AnchorPane" prefHeight="497.0" prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddPartController">
    <children>
       <GridPane layoutY="66.0" prefWidth="364.0" vgap="8.0" AnchorPane.leftAnchor="0.0">
         <columnConstraints>
@@ -66,11 +66,16 @@
             <RadioButton fx:id="outsourcedRadioButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleOutsourcedSelect" text="Outsourced" toggleGroup="$partType" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" layoutX="50.0" layoutY="386.0" prefHeight="43.0" prefWidth="264.0" spacing="64.0">
+      <HBox alignment="CENTER" layoutX="50.0" layoutY="426.0" prefHeight="43.0" prefWidth="264.0" spacing="64.0">
          <children>
             <Button fx:id="addPartSaveButton" mnemonicParsing="false" onMouseClicked="#handleSave" prefHeight="24.0" prefWidth="96.0" text="Save" />
             <Button fx:id="addPartCancelButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleCancel" prefHeight="24.0" prefWidth="96.0" text="Cancel" />
          </children>
       </HBox>
+      <Label fx:id="warningLabel" alignment="CENTER" layoutX="20.0" layoutY="388.0" prefWidth="324.0" style="-fx-text-fill: #f00;" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
