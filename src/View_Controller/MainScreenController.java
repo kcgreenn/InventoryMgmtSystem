@@ -8,14 +8,17 @@ package View_Controller;
 import Model.Inventory;
 import Model.Part;
 import Model.Product;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -72,6 +76,9 @@ public class MainScreenController implements Initializable {
     
     private ObservableList<Part> partsInventory = FXCollections.observableArrayList();
     private ObservableList<Product> productsInventory = FXCollections.observableArrayList();
+    
+    Stage stage;
+    Parent scene;
 
     /**
      * Initializes the controller class.
@@ -81,6 +88,8 @@ public class MainScreenController implements Initializable {
         // Generate tables on initialize
         generatePartsTable();
         generateProductsTable();
+        // Prevent default focus on part search field
+        partSearchField.setFocusTraversable(false);
     }    
     
     // Fill parts tableview with parts data
@@ -126,14 +135,17 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    private void handleAddPart(MouseEvent event) {
-        // TODO open add part scene
+    private void handleAddPart(MouseEvent event) throws IOException {
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/View_Controller/AddPart.fxml"));
         
+        stage.setScene(new Scene(scene));
+        stage.show();
     }
 
     @FXML
     private void handleModifyPart(MouseEvent event) {
-        // TODO open modify part scene
+        // TODO open modify part scene and pass selectedPart
     }
 
     @FXML

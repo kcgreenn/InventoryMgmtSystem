@@ -15,6 +15,8 @@ import javafx.collections.ObservableList;
 public class Inventory {
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
+    private static int currentPartId = 1;
+    private static int currentProductId = 2;
     
     public static void addPart(Part part){
         allParts.add(part);
@@ -75,5 +77,27 @@ public class Inventory {
     }
     public static ObservableList<Product> getAllProducts(){
         return allProducts;
+    }
+    public static int getCurrentPartId(){
+        return currentPartId;
+    }
+    public static int getCurrentProductId(){
+        return currentProductId;
+    }
+    public static void incrementPartId(){
+        currentPartId += 2;
+    }
+    public static void incrementProductId(){
+        currentProductId += 2;
+    }
+    /*
+    Validate the inventory level is between the min and max
+    @param inv The number of items in stock
+    @param min The minimum number of items that can be in stock
+    @param max The maximum number of items that can be in stock
+    @return Whether the inv is valid
+    */
+    public static boolean validateInvLevel(int inv, int min, int max){
+        return inv > min && inv < max;
     }
 }

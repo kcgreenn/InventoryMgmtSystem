@@ -26,8 +26,6 @@ public class KyleGreenInventorySystem extends Application {
         
     // Generate test data
         addTestData();
-        Inventory.lookupPart(1);
-//        System.out.print(Inventory.lookupPart(1));
     }
     
     @Override
@@ -53,34 +51,47 @@ public class KyleGreenInventorySystem extends Application {
     void addTestData(){
         
         // Add Inhouse parts
-         InhousePart a1 = new InhousePart(1, "Part A1", 2.99, 10, 5, 100, 101);
-         InhousePart a2 = new InhousePart(3, "Part A2", 4.99, 10, 12, 100, 102);
-         InhousePart a3 = new InhousePart(5, "Part A3", 7.99, 15, 5, 10, 103);
+         InhousePart a1 = new InhousePart(Inventory.getCurrentPartId(), "Part A1", 2.99, 10, 5, 100, 101);
+         Inventory.incrementPartId();
+         InhousePart a2 = new InhousePart(Inventory.getCurrentPartId(), "Part A2", 4.99, 10, 12, 100, 102);
+         Inventory.incrementPartId();
+         InhousePart a3 = new InhousePart(Inventory.getCurrentPartId(), "Part A3", 7.99, 15, 5, 10, 103);
+         Inventory.incrementPartId();
          
          Inventory.addPart(a1);
          Inventory.addPart(a2);
          Inventory.addPart(a3);
          
-         Inventory.addPart(new InhousePart(7, "Part A4", 3.99, 8, 5, 10, 102));
-         Inventory.addPart(new InhousePart(9, "Part A5", 11.99, 10, 15, 25, 104));
+         Inventory.addPart(new InhousePart(Inventory.getCurrentPartId(), "Part A4", 3.99, 8, 5, 10, 102));
+         Inventory.incrementPartId();
+         Inventory.addPart(new InhousePart(Inventory.getCurrentPartId(), "Part A5", 11.99, 10, 15, 25, 104));
+         Inventory.incrementPartId();
         
         // Add Outsourced Parts
-        OutsourcedPart b1 = new OutsourcedPart(11, "Part B1", 1.99, 15, 5, 100, "ACME");
-        OutsourcedPart b2 = new OutsourcedPart(13, "Part B2", 8.99, 20, 5, 100, "GE");
-        OutsourcedPart b3 = new OutsourcedPart(15, "Part B3", 13.99, 50, 5, 30, "TSMC");
+        OutsourcedPart b1 = new OutsourcedPart(Inventory.getCurrentPartId(), "Part B1", 1.99, 15, 5, 100, "ACME");
+        Inventory.incrementPartId();
+        OutsourcedPart b2 = new OutsourcedPart(Inventory.getCurrentPartId(), "Part B2", 8.99, 20, 5, 100, "GE");
+        Inventory.incrementPartId();
+        OutsourcedPart b3 = new OutsourcedPart(Inventory.getCurrentPartId(), "Part B3", 13.99, 50, 5, 30, "TSMC");
+        Inventory.incrementPartId();
         
         // Add Parts to Inventory
         Inventory.addPart(b1);
         Inventory.addPart(b2);
         Inventory.addPart(b3);
         
-        Inventory.addPart(new OutsourcedPart(17, "Part B4", 0.99, 10, 5, 20, "ACME"));
-        Inventory.addPart(new OutsourcedPart(19, "Part B5", 1.49, 10, 1, 25, "GE"));
+        Inventory.addPart(new OutsourcedPart(Inventory.getCurrentPartId(), "Part B4", 0.99, 10, 5, 20, "ACME"));
+        Inventory.incrementPartId();
+        Inventory.addPart(new OutsourcedPart(Inventory.getCurrentPartId(), "Part B5", 1.49, 10, 1, 25, "GE"));
+        Inventory.incrementPartId();
         
         // Add Products
-        Product c1 = new Product(1, "Product C1", 13.99, 10, 5, 100);
-        Product c2 = new Product(2, "Product C2", 3.99, 10, 5, 100);
-        Product c3 = new Product(3, "Product C3", 23.99, 4, 5, 100);
+        Product c1 = new Product(Inventory.getCurrentProductId(), "Product C1", 13.99, 10, 5, 100);
+        Inventory.incrementProductId();
+        Product c2 = new Product(Inventory.getCurrentProductId(), "Product C2", 3.99, 10, 5, 100);
+        Inventory.incrementProductId();
+        Product c3 = new Product(Inventory.getCurrentProductId(), "Product C3", 23.99, 4, 5, 100);
+        Inventory.incrementProductId();
         
         // Add Associated Parts to Products
         c1.addAssociatedPart(a1);
@@ -92,8 +103,10 @@ public class KyleGreenInventorySystem extends Application {
         Inventory.addProduct(c1);
         Inventory.addProduct(c2);
         Inventory.addProduct(c3);
-        Inventory.addProduct(new Product(4, "Product C4", 12.99, 10, 5, 90));
-        Inventory.addProduct(new Product(5, "Product C5", 22.49, 96, 5, 90));        
+        Inventory.addProduct(new Product(Inventory.getCurrentProductId(), "Product C4", 12.99, 10, 5, 90));
+        Inventory.incrementProductId();
+        Inventory.addProduct(new Product(Inventory.getCurrentProductId(), "Product C5", 22.49, 96, 5, 90));        
+        Inventory.incrementProductId();
     }
     
 }
