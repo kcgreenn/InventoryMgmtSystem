@@ -90,14 +90,4 @@ public class Inventory {
     public static void incrementProductId(){
         currentProductId += 2;
     }
-    /*
-    Validate the inventory level is between the min and max
-    @param inv The number of items in stock
-    @param min The minimum number of items that can be in stock
-    @param max The maximum number of items that can be in stock
-    @return Whether the inv is valid
-    */
-    public static boolean validateInvLevel(int inv, int min, int max){
-        return inv >= min && inv <= max;
-    }
 }

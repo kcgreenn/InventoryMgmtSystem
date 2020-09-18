@@ -10,6 +10,7 @@ import Model.Part;
 import Model.Product;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,7 +20,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -79,6 +82,8 @@ public class MainScreenController implements Initializable {
     
     Stage stage;
     Parent scene;
+    Part selectedPart;
+    Product selectedProduct;
 
     /**
      * Initializes the controller class.
@@ -144,20 +149,56 @@ public class MainScreenController implements Initializable {
     }
 
     @FXML
-    private void handleModifyPart(MouseEvent event) {
-        // TODO open modify part scene and pass selectedPart
+    private void handleModifyPart(MouseEvent event) throws IOException{
+        // Pass the selected part to the Modify Part Screen
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+        
+                // Tell User If No Part Is Selected
+        if(selectedPart == null){
+            Alert selectPartWarning = new Alert(Alert.AlertType.WARNING);
+            selectPartWarning.headerTextProperty().set("No part selected.");
+            selectPartWarning.showAndWait();
+            return;
+        }
+        
+        // Open Modify Part Screen for Selected Part
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/View_Controller/ModifyPart.fxml"));
+        loader.load();
+        
+        ModifyPartController MPController = loader.getController();
+        MPController.sendPart(selectedPart);
+                
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        Parent scene = loader.getRoot();
+        stage.setScene(new Scene(scene));
+        stage.show();
     }
 
     @FXML
     private void handleDeletePart(MouseEvent event) {
-        // Find selected part and delete
         Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
-        Inventory.deletePart(selectedPart);
+        // Tell User If No Part Is Selected
+        if(selectedPart == null){
+            Alert selectPartWarning = new Alert(Alert.AlertType.WARNING);
+            selectPartWarning.headerTextProperty().set("No part selected.");
+            selectPartWarning.showAndWait();
+            return;
+        }
+        // Confirm Delete with User
+        Alert deletePartAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deletePartAlert.headerTextProperty().set("Are you sure you want to permanently delete " + selectedPart.getName() + "?");
+        Optional<ButtonType> result = deletePartAlert.showAndWait();
         
-        // Refresh Table
-        partsInventory.setAll(Inventory.getAllParts());
-        partsTable.setItems(partsInventory);
-        partsTable.refresh();
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            // Find selected part and delete
+            Inventory.deletePart(selectedPart);
+        
+            // Refresh Table
+            partsInventory.setAll(Inventory.getAllParts());
+            partsTable.setItems(partsInventory);
+            partsTable.refresh();
+        }
     }
 
     @FXML
@@ -186,13 +227,20 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void handleDeleteProduct(MouseEvent event) {
-        // Find and delete selected product
-        Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
-        Inventory.deleteProduct(selectedProduct);
-        // Refresh table
-        productsInventory.setAll(Inventory.getAllProducts());
-        productsTable.setItems(productsInventory);
-        productsTable.refresh();
+        Alert deleteProductAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteProductAlert.headerTextProperty().set("Are you sure you want to permanently delete this product?");
+        Optional<ButtonType> result = deleteProductAlert.showAndWait();
+        
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            // Find and delete selected product
+            Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
+            Inventory.deleteProduct(selectedProduct);
+            // Refresh table
+            productsInventory.setAll(Inventory.getAllProducts());
+            productsTable.setItems(productsInventory);
+            productsTable.refresh();
+        }
+        
     }
 
     @FXML

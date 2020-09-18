@@ -5,17 +5,31 @@
  */
 package View_Controller;
 
+import Model.InhousePart;
+import Model.Inventory;
+import Model.OutsourcedPart;
+import Model.Part;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import kylegreeninventorysystem.inputValidation;
 
 /**
  * FXML Controller class
@@ -23,6 +37,17 @@ import javafx.scene.input.MouseEvent;
  * @author kcgre
  */
 public class ModifyPartController implements Initializable {
+    
+    Stage stage;
+    Parent scene;
+    
+    enum SelectedPartType {
+        INHOUSE,
+        OUTSOURCED
+    };
+    SelectedPartType selectedPartType;
+    
+    private Part selectedPart;
 
     @FXML
     private RadioButton inhouseRadioButton;
@@ -31,25 +56,56 @@ public class ModifyPartController implements Initializable {
     @FXML
     private RadioButton outsourcedRadioButton;
     @FXML
-    private TextField modifyPartIdTextField;
+    private TextField partIdTextField;
     @FXML
-    private TextField modifyPartNameTextField;
+    private TextField partNameTextField;
     @FXML
-    private TextField modifyPartInvTextField;
+    private TextField partInvTextField;
     @FXML
-    private TextField modifyPartPriceTextField;
+    private TextField partPriceTextField;
     @FXML
-    private TextField modifyPartMinTextField;
+    private TextField partMinTextField;
     @FXML
-    private TextField modifyPartMaxTextField;
+    private TextField partMaxTextField;
     @FXML
-    private Label variableModifyPartLabel;
+    private Label variableLabel;
     @FXML
-    private TextField variableModifyPartInput;
+    private TextField variableTextField;
     @FXML
-    private Button modifyPartSaveButton;
+    private Button addPartSaveButton;
     @FXML
-    private Button modifyPartCancelButton;
+    private Button addPartCancelButton;
+    @FXML
+    private Label warningLabel;
+    
+    /*
+    Put all of the selected part data into the text fields
+    @param selectedPart The part that will be modified
+    */
+    public void sendPart(Part selectedPart){
+        this.selectedPart = selectedPart;
+        
+        partIdTextField.setText(String.valueOf(selectedPart.getId()));
+        partNameTextField.setText(selectedPart.getName());
+        partInvTextField.setText(String.valueOf(selectedPart.getStock()));
+        partPriceTextField.setText(String.valueOf(selectedPart.getPrice()));
+        partMinTextField.setText(String.valueOf(selectedPart.getMin()));
+        partMaxTextField.setText(String.valueOf(selectedPart.getMax()));
+        
+        // Change form for each part type
+        if(selectedPart instanceof InhousePart){
+            this.selectedPartType = SelectedPartType.INHOUSE;
+            inhouseRadioButton.setSelected(true);
+            variableTextField.setText(String.valueOf(((InhousePart) selectedPart).getMachineId()));
+            variableLabel.setText("Machine ID");
+        } else if(selectedPart instanceof OutsourcedPart){
+            this.selectedPartType = SelectedPartType.OUTSOURCED;
+            outsourcedRadioButton.setSelected(true);
+            variableTextField.setText(((OutsourcedPart) selectedPart).getCompanyName());
+            variableLabel.setText("Company Name");
+        }
+        
+    }
 
     /**
      * Initializes the controller class.
@@ -60,43 +116,136 @@ public class ModifyPartController implements Initializable {
     }    
 
     @FXML
-    private void handleModifyPartInhouseSelect(MouseEvent event) {
+    private void handleIdInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartOutsourcedSelect(MouseEvent event) {
+    private void handleNameInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartNameInput(KeyEvent event) {
+    private void handleInvInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartInvInput(KeyEvent event) {
+    private void handlePriceInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartPriceInput(KeyEvent event) {
+    private void handleMinInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartMinInput(KeyEvent event) {
+    private void handleMaxInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartMaxInput(KeyEvent event) {
+    private void handleVariableInput(KeyEvent event) {
     }
 
     @FXML
-    private void handleModifyPartVariableInput(KeyEvent event) {
+    private void handleInhouseSelect(MouseEvent event) {
     }
 
     @FXML
-    private void handleModifyPartSave(MouseEvent event) {
+    private void handleOutsourcedSelect(MouseEvent event) {
     }
 
     @FXML
-    private void handleModifyPartCancel(MouseEvent event) {
+    private void handleSave(MouseEvent event) throws IOException, Exception {
+        // Gather new part data
+        int newPartId = Integer.parseInt(partIdTextField.getText());
+        String newPartName = partNameTextField.getText();
+        double newPartPrice;
+        int newPartInv;
+        int newPartMin;
+        int newPartMax;
+        
+        if(newPartName.isEmpty()){
+            kylegreeninventorysystem.Error.showError(partNameTextField, warningLabel, "Part Name Is Required");
+            return;
+        }
+        
+        // Validate The Inputs Before Saving New Part
+        try{
+            newPartInv = Integer.parseInt(partInvTextField.getText());
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partInvTextField, warningLabel, "Inv Must Be A Number.");
+            return;
+        }
+        try{
+            newPartPrice = Double.parseDouble(partPriceTextField.getText());
+        } catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partPriceTextField, warningLabel, "Price Must Be A Number.");
+            return;
+        }
+        try{
+            newPartMin = Integer.parseInt(partMinTextField.getText());
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partMinTextField, warningLabel, "Min Must Be A Number.");
+            return;
+        }
+        try{
+            newPartMax = Integer.parseInt(partMaxTextField.getText());
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partMaxTextField, warningLabel, "Max Must Be A Number.");
+            return;
+        }
+        
+        // Valdate Inventory Level Is Between Min And Max
+        if(!inputValidation.isValidInv(newPartInv, newPartMin, newPartMax)){
+            kylegreeninventorysystem.Error.showError(partInvTextField, warningLabel, "Inventory must be between minimum and maximum.");
+            return;
+        }    
+        
+        if(selectedPartType == ModifyPartController.SelectedPartType.INHOUSE){
+            int newPartMachineId;
+
+            try{
+                newPartMachineId = Integer.parseInt(variableTextField.getText());
+            }catch(NumberFormatException nfe){
+                kylegreeninventorysystem.Error.showError(variableTextField, warningLabel, "Machine ID Must Be A Number.");
+                return;
+            }
+            int index = Inventory.getAllParts().indexOf(this.selectedPart);
+            Inventory.updatePart(index, 
+                    new InhousePart(newPartId, newPartName, newPartPrice, newPartInv, newPartMin, newPartMax, newPartMachineId));
+            
+        } else if(selectedPartType == ModifyPartController.SelectedPartType.OUTSOURCED){
+            String newPartCompanyName = variableTextField.getText();
+            if(newPartCompanyName.isEmpty()){
+                kylegreeninventorysystem.Error.showError(variableTextField, warningLabel, "Company Name Is Required.");
+            } else{
+                int index = Inventory.getAllParts().indexOf(this.selectedPartType);
+                Inventory.updatePart(index, 
+                    new OutsourcedPart(newPartId, newPartName, newPartPrice, newPartInv, newPartMin, newPartMax, newPartCompanyName));
+            }
+            
+        }
+            // Return to main screen
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View_Controller/MainScreen.fxml"));
+        
+            stage.setScene(new Scene(scene));
+            stage.show();
+    }
+
+        @FXML
+    private void handleCancel(MouseEvent event) throws IOException {
+        // Confirm Cancel Action
+        Alert cancelAlert = new Alert(AlertType.CONFIRMATION);
+        cancelAlert.headerTextProperty().set("Are you sure you want to cancel?");
+        
+        Optional<ButtonType> result = cancelAlert.showAndWait();
+        
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            // Return to main screen if user confirms cancel
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View_Controller/MainScreen.fxml"));
+        
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
     }
     
 }
