@@ -30,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import kylegreeninventorysystem.inputValidation;
 
 /**
  * FXML Controller class
@@ -298,6 +299,17 @@ public class ModifyProductController implements Initializable {
             return;
         }
         
+        // Valdate Inventory Level Is Between Min And Max
+        if(!inputValidation.isValidInv(productInv, productMin, productMax)){
+            kylegreeninventorysystem.Error.showError(productInvField, warningLabel, "Inventory level must be between minimum and maximum.");
+            return;
+        }           
+        
+        this.selectedProduct.setName(productName);
+        this.selectedProduct.setStock(productInv);
+        this.selectedProduct.setPrice(productPrice);
+        this.selectedProduct.setMin(productMin);
+        this.selectedProduct.setMax(productMax);
         
         // Return to main screen
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();

@@ -30,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import kylegreeninventorysystem.inputValidation;
 
 /**
  * FXML Controller class
@@ -268,6 +269,12 @@ public class AddProductController implements Initializable {
             kylegreeninventorysystem.Error.showError(productMaxField, warningLabel, "Max Must Be A Number.");
             return;
         } 
+        
+        // Valdate Inventory Level Is Between Min And Max
+        if(!inputValidation.isValidInv(productInv, productMin, productMax)){
+            kylegreeninventorysystem.Error.showError(productInvField, warningLabel, "Inventory level must be between minimum and maximum.");
+            return;
+        }           
         
         // Validate total price of parts is less than price of product
         this.newProduct.getAllAssociatedParts().forEach((Part part)->{
