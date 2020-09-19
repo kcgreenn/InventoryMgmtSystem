@@ -32,19 +32,19 @@
       <TextField fx:id="productMaxField" layoutX="273.0" layoutY="270.0" onKeyPressed="#handleProductMaxInput" prefWidth="50.0" />
       <TableView fx:id="partSearchTable" layoutX="370.0" layoutY="70.0" prefHeight="144.0" prefWidth="358.0">
         <columns>
-          <TableColumn prefWidth="57.0" text="Part ID" />
-          <TableColumn prefWidth="79.0" text="Part Name" />
-            <TableColumn prefWidth="94.0" text="Inventory Level" />
-            <TableColumn prefWidth="127.0" text="Price/Cost Per Unit" />
+          <TableColumn fx:id="allPartIdCol" prefWidth="57.0" text="Part ID" />
+          <TableColumn fx:id="allPartNameCol" prefWidth="79.0" text="Part Name" />
+            <TableColumn fx:id="allPartInvCol" prefWidth="94.0" text="Inventory Level" />
+            <TableColumn fx:id="allPartPriceCol" prefWidth="127.0" text="Price/Cost Per Unit" />
         </columns>
       </TableView>
       <TextField fx:id="partSearchField" layoutX="561.0" layoutY="31.0" onKeyPressed="#handlePartSearchInput" prefHeight="25.0" prefWidth="165.0" promptText="Search By Part ID Or Name" />
       <TableView fx:id="associatedPartsTable" layoutX="370.0" layoutY="262.0" prefHeight="144.0" prefWidth="358.0">
          <columns>
-            <TableColumn prefWidth="57.0" text="Part ID" />
-            <TableColumn prefWidth="79.0" text="Part Name" />
-            <TableColumn prefWidth="94.0" text="Inventory Level" />
-            <TableColumn prefWidth="127.0" text="Price/Cost Per Unit" />
+            <TableColumn fx:id="asscPartIdCol" prefWidth="57.0" text="Part ID" />
+            <TableColumn fx:id="asscPartNameCol" prefWidth="79.0" text="Part Name" />
+            <TableColumn fx:id="asscPartInvCol" prefWidth="94.0" text="Inventory Level" />
+            <TableColumn fx:id="asscPartPriceCol" prefWidth="127.0" text="Price/Cost Per Unit" />
          </columns>
       </TableView>
       <Button fx:id="addPartButton" layoutX="563.0" layoutY="228.0" mnemonicParsing="false" onMouseClicked="#handleAddPart" prefHeight="25.0" prefWidth="165.0" text="Add Associated Part" />
@@ -61,5 +61,10 @@
             <Font size="14.0" />
          </font>
       </Text>
+      <Label fx:id="warningLabel" alignment="CENTER" layoutX="97.0" layoutY="344.0" prefHeight="17.0" prefWidth="220.0" textAlignment="CENTER" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

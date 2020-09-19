@@ -30,6 +30,8 @@ public class Product {
         this.max = max;
     }
     
+    public Product(){}
+    
     public void setId(int id){
         this.id = id;
     }

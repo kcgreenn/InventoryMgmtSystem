@@ -87,10 +87,6 @@ public class AddPartController implements Initializable {
     }
 
     @FXML
-    private void handleIdInput(KeyEvent event) {
-    }
-
-    @FXML
     private void handleNameInput(KeyEvent event) {
         Error.clearError(partNameTextField, warningLabel);
     }

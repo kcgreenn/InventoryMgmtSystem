@@ -45,6 +45,8 @@ public class ModifyProductController implements Initializable {
     private ObservableList<Part> associatedPartsList = FXCollections.observableArrayList();
     private ObservableList<Part> partsInventory = FXCollections.observableArrayList();
     
+    private int totalPartPrice;
+    
     @FXML
     private TableColumn<?, ?> allPartIdCol;
     @FXML
@@ -246,7 +248,63 @@ public class ModifyProductController implements Initializable {
     }
 
     @FXML
-    private void handleSave(MouseEvent event) {
+    private void handleSave(MouseEvent event) throws IOException{
+        // Gather product data from text fields
+        int productId = Inventory.getCurrentProductId();
+        String productName = productNameField.getText();
+        double productPrice;
+        int productInv;
+        int productMin;
+        int productMax;        
+        // Reset totalPartPrice if saved before
+        this.totalPartPrice = 0;
+        
+        // Validate The Inputs Before Saving New Part
+        if(productName.isEmpty()){
+            kylegreeninventorysystem.Error.showError(productNameField, warningLabel, "Product Name Is Required");
+            return;
+        }
+        try{
+            productInv = Integer.parseInt(productInvField.getText());
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(productInvField, warningLabel, "Inv Must Be A Number.");
+            return;
+        }
+        try{
+            productPrice = Double.parseDouble(productPriceField.getText());
+        } catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(productPriceField, warningLabel, "Price Must Be A Number.");
+            return;
+        }
+        try{
+            productMin = Integer.parseInt(productMinField.getText());
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(productMinField, warningLabel, "Min Must Be A Number.");
+            return;
+        }   
+        try{
+            productMax = Integer.parseInt(productMaxField.getText());
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(productMaxField, warningLabel, "Max Must Be A Number.");
+            return;
+        } 
+        
+        // Validate total price of parts is less than price of product
+        this.selectedProduct.getAllAssociatedParts().forEach((Part part)->{
+            this.totalPartPrice += part.getPrice();        
+        });        
+        if(this.totalPartPrice > productPrice){
+            kylegreeninventorysystem.Error.showError(productPriceField, warningLabel, "The product's price must be greater than the sum of the associated part's prices.");
+            return;
+        }
+        
+        
+        // Return to main screen
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/View_Controller/MainScreen.fxml"));
+        
+        stage.setScene(new Scene(scene));
+        stage.show();      
     }
 
     @FXML
