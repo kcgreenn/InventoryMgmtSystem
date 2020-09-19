@@ -77,7 +77,7 @@ public class ModifyPartController implements Initializable {
     private Button addPartCancelButton;
     @FXML
     private Label warningLabel;
-    
+   
     /*
     Put all of the selected part data into the text fields
     @param selectedPart The part that will be modified
@@ -112,7 +112,8 @@ public class ModifyPartController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        inhouseRadioButton.setDisable(true);
+        outsourcedRadioButton.setDisable(true);
     }    
 
     @FXML
@@ -121,26 +122,65 @@ public class ModifyPartController implements Initializable {
 
     @FXML
     private void handleNameInput(KeyEvent event) {
+        kylegreeninventorysystem.Error.clearError(partNameTextField, warningLabel);        
     }
 
     @FXML
     private void handleInvInput(KeyEvent event) {
+        // Validate Inv Input
+        try{
+            Integer.parseInt(partInvTextField.getText());
+            kylegreeninventorysystem.Error.clearError(partInvTextField, warningLabel);
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partInvTextField, warningLabel, "Inv must be a number");
+        }        
     }
 
     @FXML
     private void handlePriceInput(KeyEvent event) {
+        // Validate Price Input
+        try{
+            Double.parseDouble(partPriceTextField.getText());
+            kylegreeninventorysystem.Error.clearError(partPriceTextField, warningLabel);
+        } catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partPriceTextField, warningLabel, "Price must be a number");
+        }          
     }
 
     @FXML
     private void handleMinInput(KeyEvent event) {
+        // Validate Min Input
+        try{
+            Integer.parseInt(partMinTextField.getText());
+            kylegreeninventorysystem.Error.clearError(partMinTextField, warningLabel);
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partMinTextField, warningLabel, "Min must be a number");
+        }          
     }
 
     @FXML
     private void handleMaxInput(KeyEvent event) {
+        // Validate Max Input
+        try{
+            Integer.parseInt(partMaxTextField.getText());
+            kylegreeninventorysystem.Error.clearError(partMaxTextField, warningLabel);
+        }catch(NumberFormatException nfe){
+            kylegreeninventorysystem.Error.showError(partMaxTextField, warningLabel, "Max Must Be A Number");
+        }          
     }
 
     @FXML
     private void handleVariableInput(KeyEvent event) {
+        if(selectedPartType == ModifyPartController.SelectedPartType.INHOUSE){
+            try{
+                Integer.parseInt(variableTextField.getText());
+                kylegreeninventorysystem.Error.clearError(variableTextField, warningLabel);
+            }catch(NumberFormatException nfe){
+                kylegreeninventorysystem.Error.showError(variableTextField, warningLabel, "Machine ID Must Be A Number.");
+            }
+        }else if(selectedPartType == ModifyPartController.SelectedPartType.OUTSOURCED){
+            kylegreeninventorysystem.Error.clearError(variableTextField, warningLabel);
+        }        
     }
 
     @FXML
