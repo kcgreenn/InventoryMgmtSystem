@@ -16,18 +16,26 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *
- * @author kcgre
+ * An inventory system for a manufacturing company. GUI created with JavaFX and SceneBuilder.
+ * @see <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/fxml/doc-files/introduction_to_fxml.html">JavaFX</a>
+ * @see <a href="https://docs.gluonhq.com/scenebuilder/">SceneBuilder</a>
+ * @author KC Green
  */
+
 public class KyleGreenInventorySystem extends Application {
     
+    /*
+    Initializes the application when it first loads. Generates test data for invenotry class.
+    */
     @Override
-    public void init() throws Exception {
-        
+    public void init() throws Exception {  
     // Generate test data
         addTestData();
     }
     
+    /*
+    Creates the Main Screen when the applications starts.
+    */
     @Override
     public void start(Stage stage) throws Exception {
         
@@ -41,14 +49,17 @@ public class KyleGreenInventorySystem extends Application {
     }
     
     /**
+     * Launches the JavaFX application.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
     
-    // Generate Data for Program
-    void addTestData(){
+    /*
+    * Generate test data - creates parts and products and adds them to the Inventory class.
+    */
+    public void addTestData(){
         
         // Add Inhouse parts
          InhousePart a1 = new InhousePart(Inventory.getCurrentPartId(), "Part A1", 2.99, 10, 5, 100, 101);

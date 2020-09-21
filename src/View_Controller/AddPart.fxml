@@ -38,7 +38,7 @@
             <Label layoutX="10.0" layoutY="17.0" text="Price/Cost" GridPane.rowIndex="4" />
             <Label layoutX="10.0" layoutY="17.0" text="Min" GridPane.rowIndex="5" />
             <Label layoutX="10.0" layoutY="17.0" text="Max" GridPane.rowIndex="6" />
-            <TextField fx:id="partIdTextField" editable="false" onKeyReleased="#handleIdInput" promptText="Auto-Gen/Disabled" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="partIdTextField" editable="false" promptText="Auto-Gen/Disabled" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="partNameTextField" onKeyReleased="#handleNameInput" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="partInvTextField" onKeyReleased="#handleInvInput" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="partPriceTextField" onKeyReleased="#handlePriceInput" GridPane.columnIndex="1" GridPane.rowIndex="4" />

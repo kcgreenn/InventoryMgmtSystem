@@ -45,6 +45,7 @@ public class ModifyProductController implements Initializable {
     private Product selectedProduct;
     private ObservableList<Part> associatedPartsList = FXCollections.observableArrayList();
     private ObservableList<Part> partsInventory = FXCollections.observableArrayList();
+    private ObservableList<Part> temporaryPartList = FXCollections.observableArrayList();
     
     private int totalPartPrice;
     
@@ -108,6 +109,8 @@ public class ModifyProductController implements Initializable {
         productMinField.setText(String.valueOf(selectedProduct.getMin()));
         productMaxField.setText(String.valueOf(selectedProduct.getMax()));
         
+        this.temporaryPartList.addAll(this.selectedProduct.getAllAssociatedParts());
+        
         // Populate Table Views
         this.generateAllPartsTable();
         this.generateAsscPartsTable();
@@ -130,7 +133,7 @@ public class ModifyProductController implements Initializable {
     
     // Fill associated parts tableview with selectedProduct data
     private void generateAsscPartsTable(){
-        associatedPartsList.setAll(this.selectedProduct.getAllAssociatedParts());
+        associatedPartsList.setAll(this.temporaryPartList);
         
         // Set PropertyValueFactory to match class members with columns
         asscPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -226,8 +229,8 @@ public class ModifyProductController implements Initializable {
             selectPartWarning.showAndWait();
             return;
         }        
-        // Add selected part to product
-        this.selectedProduct.addAssociatedPart(selectedPart);
+        // Add selected part to temporary part list
+        this.temporaryPartList.add(selectedPart);
         this.generateAsscPartsTable();
     }
 
@@ -244,14 +247,13 @@ public class ModifyProductController implements Initializable {
             return;
         } 
         // Remove selected part from product
-        this.selectedProduct.deleteAssociatedPart(selectedPart);
+        this.temporaryPartList.remove(selectedPart);
         this.generateAsscPartsTable();
     }
 
     @FXML
     private void handleSave(MouseEvent event) throws IOException{
         // Gather product data from text fields
-        int productId = Inventory.getCurrentProductId();
         String productName = productNameField.getText();
         double productPrice;
         int productInv;
@@ -291,9 +293,9 @@ public class ModifyProductController implements Initializable {
         } 
         
         // Validate total price of parts is less than price of product
-        this.selectedProduct.getAllAssociatedParts().forEach((Part part)->{
-            this.totalPartPrice += part.getPrice();        
-        });        
+        this.temporaryPartList.forEach((Part part)->{
+            this.totalPartPrice += part.getPrice();
+        });
         if(this.totalPartPrice > productPrice){
             kylegreeninventorysystem.Error.showError(productPriceField, warningLabel, "The product's price must be greater than the sum of the associated part's prices.");
             return;
@@ -305,11 +307,16 @@ public class ModifyProductController implements Initializable {
             return;
         }           
         
-        this.selectedProduct.setName(productName);
-        this.selectedProduct.setStock(productInv);
-        this.selectedProduct.setPrice(productPrice);
-        this.selectedProduct.setMin(productMin);
-        this.selectedProduct.setMax(productMax);
+
+
+        // Find index of selected Product and update with new information
+        Product newProduct = new Product( Integer.parseInt(productIdField.getText()),productName, productPrice, productInv, productMin, productMax);
+        
+        this.temporaryPartList.forEach((Part part)->{
+            newProduct.addAssociatedPart(part);
+        });
+        int index = Inventory.getAllProducts().indexOf(selectedProduct);
+        Inventory.updateProduct(index, newProduct);
         
         // Return to main screen
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();

@@ -34,7 +34,7 @@ import javafx.stage.Stage;
 /**
  * FXML Controller class
  *
- * @author kcgre
+ * @author KC Green
  */
 public class MainScreenController implements Initializable {
 
@@ -97,7 +97,9 @@ public class MainScreenController implements Initializable {
         partSearchField.setFocusTraversable(false);
     }    
     
-    // Fill parts tableview with parts data
+    /**
+     * Fills the Parts TableView with all Parts in the Inventory class
+     */
     private void generatePartsTable(){
         partsInventory.setAll(Inventory.getAllParts());
         
@@ -111,7 +113,9 @@ public class MainScreenController implements Initializable {
         partsTable.refresh();
     }
     
-    // Fill products table view with product data
+    /**
+     * Fills the Products TableView with all Products in the Inventory class
+     */
     private void generateProductsTable(){
         productsInventory.setAll(Inventory.getAllProducts());
         
@@ -125,6 +129,11 @@ public class MainScreenController implements Initializable {
         productsTable.refresh();
     }
     
+    /**
+     * Searches for a matching Part when the user types in the part search TextField.
+     * <p>Uses the overloaded lookupPart method in the Inventory class, based on the type of data the user enters.</p>
+     * @param event The keyPressed event
+     */
     @FXML
     private void handleSearchPart(KeyEvent event) {
         String searchInput = partSearchField.getText();
@@ -138,16 +147,25 @@ public class MainScreenController implements Initializable {
         partsTable.setItems(partsInventory);
         partsTable.refresh();
     }
-
+    /**
+     * Opens the AddPart screen, allowing the user to enter the information of a new Part
+     * @param event The mouseClicked event
+     * @throws IOException 
+     */
     @FXML
     private void handleAddPart(MouseEvent event) throws IOException {
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/View_Controller/AddPart.fxml"));
         
         stage.setScene(new Scene(scene));
-        stage.show();
+        stage.show();      
     }
 
+    /**
+     * Opens the ModifyPart screen, allowing the modification of the part selected from the Part TableView
+     * @param event The mouseClicked event
+     * @throws IOException 
+     */
     @FXML
     private void handleModifyPart(MouseEvent event) throws IOException{
         // Pass the selected part to the Modify Part Screen
@@ -175,6 +193,10 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Deletes the Part selected from the Part TableView
+     * @param event The mouseClicked event
+     */
     @FXML
     private void handleDeletePart(MouseEvent event) {
         Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
@@ -200,7 +222,11 @@ public class MainScreenController implements Initializable {
             partsTable.refresh();
         }
     }
-
+    /**
+     * Searches for a matching Product when the user types in the product search TextField.
+     * <p>Uses the overloaded lookupProduct method in the Inventory class, based on the type of data the user enters.</p>
+     * @param event The keyPressed event
+     */
     @FXML
     private void handleSearchProduct(KeyEvent event) {
         String searchInput = productSearchField.getText();
@@ -214,7 +240,11 @@ public class MainScreenController implements Initializable {
         productsTable.setItems(productsInventory);
         productsTable.refresh();
     }
-
+    /**
+     * Opens the AddProduct screen, allowing the user to enter the information of a new Product
+     * @param event The mouseClicked event
+     * @throws IOException 
+     */
     @FXML
     private void handleAddProduct(MouseEvent event) throws IOException{
         stage = (Stage)((Button)event.getSource()).getScene().getWindow();
@@ -223,7 +253,11 @@ public class MainScreenController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
+    /**
+     * Opens the ModifyProduct screen, allowing the modification of the part selected from the Product TableView
+     * @param event The mouseClicked event
+     * @throws IOException 
+     */
     @FXML
     private void handleModifyProduct(MouseEvent event) throws IOException{
         // Pass the selected part to the Modify Part Screen
@@ -250,7 +284,10 @@ public class MainScreenController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
-
+    /**
+     * Deletes the Product selected from the Product TableView
+     * @param event The mouseClicked event
+     */
     @FXML
     private void handleDeleteProduct(MouseEvent event) {
         Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
@@ -277,6 +314,10 @@ public class MainScreenController implements Initializable {
         }
     }
 
+    /**
+     * Closes the Java application
+     * @param event The mouseClicked event
+     */
     @FXML
     private void handleExitApp(MouseEvent event) {
         Platform.exit();

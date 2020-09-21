@@ -315,6 +315,7 @@ public class AddProductController implements Initializable {
         Optional<ButtonType> result = cancelAlert.showAndWait();
         
         if(result.isPresent() && result.get() == ButtonType.OK){
+            // Delete new product object
             this.newProduct = null;
             // Return to main screen if user confirms cancel
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
