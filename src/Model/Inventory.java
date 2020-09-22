@@ -30,6 +30,8 @@ public class Inventory {
      */
     private static int currentProductId = 2;
     
+    private static boolean isAssociated = false;
+    
     /**
     * Adds a  to this object's allParts member.
     * @param part The Part that will be added to this object's allParts member.
@@ -122,6 +124,16 @@ public class Inventory {
      * @return A boolean value of whether or not the delete was successful
      */
     public static boolean deletePart(Part selectedPart){
+        // Check if part is associated with any product
+
+        Inventory.getAllProducts().forEach((Product product)->{
+            if(product.getAllAssociatedParts().contains(selectedPart)){
+                isAssociated = true;
+            }
+        });
+        if(isAssociated){
+            return false;
+        }
         return allParts.remove(selectedPart);
     }
     /**

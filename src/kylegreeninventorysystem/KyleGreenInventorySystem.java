@@ -59,6 +59,11 @@ public class KyleGreenInventorySystem extends Application {
     /*
     * Generate test data - creates parts and products and adds them to the Inventory class.
     */
+
+    /**
+     * Populates the inventory with sample products and parts.
+     */
+
     public void addTestData(){
         
         // Add Inhouse parts

@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -84,9 +85,13 @@ public class MainScreenController implements Initializable {
     Parent scene;
     Part selectedPart;
     Product selectedProduct;
+    @FXML
+    private Label warningLabel;
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -142,6 +147,16 @@ public class MainScreenController implements Initializable {
             partsInventory.setAll(Inventory.lookupPart(Integer.parseInt(searchInput)));
         }catch(NumberFormatException nfe){
             partsInventory.setAll(Inventory.lookupPart(searchInput));
+        }
+        // Display error if there are no matching parts
+        if(partsInventory.isEmpty()){
+            warningLabel.setText("No Matching Parts.");
+        }else{
+            warningLabel.setText("");
+        }
+        // Select Part if it is the only match
+        if(partsInventory.size()==1){
+            partsTable.getSelectionModel().select(0);
         }
 
         partsTable.setItems(partsInventory);
@@ -214,12 +229,16 @@ public class MainScreenController implements Initializable {
         
         if(result.isPresent() && result.get() == ButtonType.OK){
             // Find selected part and delete
-            Inventory.deletePart(selectedPart);
-        
-            // Refresh Table
-            partsInventory.setAll(Inventory.getAllParts());
-            partsTable.setItems(partsInventory);
-            partsTable.refresh();
+            boolean success = Inventory.deletePart(selectedPart);
+            if(success){
+                // Refresh Table
+                warningLabel.setText("");
+                partsInventory.setAll(Inventory.getAllParts());
+                partsTable.setItems(partsInventory);
+                partsTable.refresh();                
+            } else{
+                warningLabel.setText("That part is associated with a product and cannot be deleted.");
+            }
         }
     }
     /**
@@ -236,6 +255,17 @@ public class MainScreenController implements Initializable {
         }catch(NumberFormatException nfe){
             productsInventory.setAll(Inventory.lookupProduct(searchInput));
         }
+        // Display error if there are no matching products
+        if(productsInventory.isEmpty()){
+            warningLabel.setText("No Matching Products.");
+        }else{
+            warningLabel.setText("");
+        }
+        
+        // Select Product if it is the only match
+        if(productsInventory.size()==1){
+            productsTable.getSelectionModel().select(0);
+        }        
         
         productsTable.setItems(productsInventory);
         productsTable.refresh();
@@ -298,13 +328,17 @@ public class MainScreenController implements Initializable {
             selectPartWarning.showAndWait();
             return;
         }
+        // Inform user they cannot delete a product that has associated parts
+        if(selectedProduct.getAllAssociatedParts().size()>0){
+            warningLabel.setText("You cannot delete a product that has parts associated with it.");
+        }
         // Confirm Delete with User
         Alert deleteProductAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        deleteProductAlert.headerTextProperty().set("Are you sure you want to permanently delete " + selectedPart.getName() + "?");
+        deleteProductAlert.headerTextProperty().set("Are you sure you want to permanently delete " + selectedProduct.getName() + "?");
         Optional<ButtonType> result = deleteProductAlert.showAndWait();
         
         if(result.isPresent() && result.get() == ButtonType.OK){
-            // Find selected part and delete
+            // Find selected product and delete
             Inventory.deleteProduct(selectedProduct);
         
             // Refresh Table

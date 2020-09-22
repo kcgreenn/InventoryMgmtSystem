@@ -99,6 +99,12 @@ public class ModifyProductController implements Initializable {
     Put all of the selected part data into the text fields
     @param selectedProduct The product that will be modified
     */
+
+    /**
+     * Passes the selected product information to the modify part screen
+     * @param selectedProduct The product that is to be modified
+     */
+
     public void sendProduct(Product selectedProduct){
         this.selectedProduct = selectedProduct;
         
@@ -148,6 +154,8 @@ public class ModifyProductController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -166,7 +174,9 @@ public class ModifyProductController implements Initializable {
             Double.parseDouble(productPriceField.getText());
             kylegreeninventorysystem.Error.clearError(productPriceField, warningLabel);
         } catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(productPriceField, warningLabel, "Price must be a number");
+            if(productPriceField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(productPriceField, warningLabel, "Price must be a number");
+            }
         }        
     }
 
@@ -177,7 +187,9 @@ public class ModifyProductController implements Initializable {
             Integer.parseInt(productInvField.getText());
             kylegreeninventorysystem.Error.clearError(productInvField, warningLabel);
         }catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(productInvField, warningLabel, "Inv must be a number");
+            if(productInvField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(productInvField, warningLabel, "Inv must be a number");
+            }
         }
     }
 
@@ -188,7 +200,9 @@ public class ModifyProductController implements Initializable {
             Integer.parseInt(productMinField.getText());
             kylegreeninventorysystem.Error.clearError(productMinField, warningLabel);
         }catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(productMinField, warningLabel, "Min must be a number");
+            if(productMinField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(productMinField, warningLabel, "Min must be a number");
+            }
         }        
     }
 
@@ -199,7 +213,9 @@ public class ModifyProductController implements Initializable {
             Integer.parseInt(productMaxField.getText());
             kylegreeninventorysystem.Error.clearError(productMaxField, warningLabel);
         }catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(productMaxField, warningLabel, "Max Must Be A Number");
+            if(productMaxField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(productMaxField, warningLabel, "Max Must Be A Number");
+            }
         }        
     }
 
@@ -300,7 +316,11 @@ public class ModifyProductController implements Initializable {
             kylegreeninventorysystem.Error.showError(productPriceField, warningLabel, "The product's price must be greater than the sum of the associated part's prices.");
             return;
         }
-        
+        if(!inputValidation.isValidMin(productMin, productMax)){
+            kylegreeninventorysystem.Error.showError(productMinField, warningLabel, "Min must be less than max.");
+            return;
+        }        
+                
         // Valdate Inventory Level Is Between Min And Max
         if(!inputValidation.isValidInv(productInv, productMin, productMax)){
             kylegreeninventorysystem.Error.showError(productInvField, warningLabel, "Inventory level must be between minimum and maximum.");

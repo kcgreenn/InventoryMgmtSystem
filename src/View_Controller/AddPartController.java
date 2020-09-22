@@ -78,6 +78,8 @@ public class AddPartController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -98,7 +100,9 @@ public class AddPartController implements Initializable {
             Integer.parseInt(partInvTextField.getText());
             Error.clearError(partInvTextField, warningLabel);
         }catch(NumberFormatException nfe){
-            Error.showError(partInvTextField, warningLabel, "Inv must be a number");
+            if(partInvTextField.getText().length()>0){
+                Error.showError(partInvTextField, warningLabel, "Inv must be a number");
+            }
         }
     }
 
@@ -109,7 +113,9 @@ public class AddPartController implements Initializable {
             Double.parseDouble(partPriceTextField.getText());
             Error.clearError(partPriceTextField, warningLabel);
         } catch(NumberFormatException nfe){
-            Error.showError(partPriceTextField, warningLabel, "Price must be a number");
+            if(partPriceTextField.getText().length()>0){
+                Error.showError(partPriceTextField, warningLabel, "Price must be a number");
+            }
         }
     }
 
@@ -120,7 +126,9 @@ public class AddPartController implements Initializable {
             Integer.parseInt(partMinTextField.getText());
             Error.clearError(partMinTextField, warningLabel);
         }catch(NumberFormatException nfe){
-            Error.showError(partMinTextField, warningLabel, "Min must be a number");
+            if(partMinTextField.getText().length()>0){
+                Error.showError(partMinTextField, warningLabel, "Min must be a number");
+            }
         }
     }
 
@@ -131,7 +139,9 @@ public class AddPartController implements Initializable {
             Integer.parseInt(partMaxTextField.getText());
             Error.clearError(partMaxTextField, warningLabel);
         }catch(NumberFormatException nfe){
-            Error.showError(partMinTextField, warningLabel, "Max Must Be A Number");
+            if(partMaxTextField.getText().length()>0){
+                Error.showError(partMinTextField, warningLabel, "Max Must Be A Number");
+            }
         }
     }
 
@@ -142,7 +152,9 @@ public class AddPartController implements Initializable {
                 Integer.parseInt(variableTextField.getText());
                 Error.clearError(variableTextField, warningLabel);
             }catch(NumberFormatException nfe){
-                Error.showError(variableTextField, warningLabel, "Machine ID Must Be A Number.");
+                if(variableTextField.getText().length()>0){
+                    Error.showError(variableTextField, warningLabel, "Machine ID Must Be A Number.");
+                }
             }
         }else if(selectedPartType == SelectedPartType.OUTSOURCED){
             Error.clearError(variableTextField, warningLabel);
@@ -201,6 +213,10 @@ public class AddPartController implements Initializable {
             newPartMax = Integer.parseInt(partMaxTextField.getText());
         }catch(NumberFormatException nfe){
             Error.showError(partMaxTextField, warningLabel, "Max Must Be A Number.");
+            return;
+        }
+        if(!inputValidation.isValidMin(newPartMin, newPartMax)){
+            Error.showError(partMinTextField, warningLabel, "Min must be less than max.");
             return;
         }
         

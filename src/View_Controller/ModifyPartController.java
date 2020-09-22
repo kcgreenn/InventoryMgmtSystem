@@ -82,6 +82,12 @@ public class ModifyPartController implements Initializable {
     Put all of the selected part data into the text fields
     @param selectedPart The part that will be modified
     */
+
+    /**
+     * Passes the selected part information into the modify part screen
+     * @param selectedPart The part that will be modified
+     */
+
     public void sendPart(Part selectedPart){
         this.selectedPart = selectedPart;
         
@@ -109,11 +115,12 @@ public class ModifyPartController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        inhouseRadioButton.setDisable(true);
-        outsourcedRadioButton.setDisable(true);
+
     }    
 
     @FXML
@@ -132,7 +139,9 @@ public class ModifyPartController implements Initializable {
             Integer.parseInt(partInvTextField.getText());
             kylegreeninventorysystem.Error.clearError(partInvTextField, warningLabel);
         }catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(partInvTextField, warningLabel, "Inv must be a number");
+            if(partInvTextField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(partInvTextField, warningLabel, "Inv must be a number");
+            }
         }        
     }
 
@@ -143,7 +152,9 @@ public class ModifyPartController implements Initializable {
             Double.parseDouble(partPriceTextField.getText());
             kylegreeninventorysystem.Error.clearError(partPriceTextField, warningLabel);
         } catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(partPriceTextField, warningLabel, "Price must be a number");
+            if(partPriceTextField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(partPriceTextField, warningLabel, "Price must be a number");
+            }
         }          
     }
 
@@ -154,7 +165,9 @@ public class ModifyPartController implements Initializable {
             Integer.parseInt(partMinTextField.getText());
             kylegreeninventorysystem.Error.clearError(partMinTextField, warningLabel);
         }catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(partMinTextField, warningLabel, "Min must be a number");
+            if(partMinTextField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(partMinTextField, warningLabel, "Min must be a number");
+            }
         }          
     }
 
@@ -165,7 +178,9 @@ public class ModifyPartController implements Initializable {
             Integer.parseInt(partMaxTextField.getText());
             kylegreeninventorysystem.Error.clearError(partMaxTextField, warningLabel);
         }catch(NumberFormatException nfe){
-            kylegreeninventorysystem.Error.showError(partMaxTextField, warningLabel, "Max Must Be A Number");
+            if(partMaxTextField.getText().length()>0){
+                kylegreeninventorysystem.Error.showError(partMaxTextField, warningLabel, "Max Must Be A Number");
+            }
         }          
     }
 
@@ -185,10 +200,16 @@ public class ModifyPartController implements Initializable {
 
     @FXML
     private void handleInhouseSelect(MouseEvent event) {
+        variableLabel.setText("Machine ID");
+        this.selectedPartType = SelectedPartType.INHOUSE;
+        partNameTextField.requestFocus();     
     }
 
     @FXML
     private void handleOutsourcedSelect(MouseEvent event) {
+        variableLabel.setText("Company Name");
+        this.selectedPartType = SelectedPartType.OUTSOURCED;
+        partNameTextField.requestFocus();        
     }
 
     @FXML
@@ -231,14 +252,17 @@ public class ModifyPartController implements Initializable {
             kylegreeninventorysystem.Error.showError(partMaxTextField, warningLabel, "Max Must Be A Number.");
             return;
         }
-        
+        if(!inputValidation.isValidMin(newPartMin, newPartMax)){
+            kylegreeninventorysystem.Error.showError(partMinTextField, warningLabel, "Min must be less than max.");
+            return;
+        }        
         // Valdate Inventory Level Is Between Min And Max
         if(!inputValidation.isValidInv(newPartInv, newPartMin, newPartMax)){
             kylegreeninventorysystem.Error.showError(partInvTextField, warningLabel, "Inventory must be between minimum and maximum.");
             return;
         }    
         
-        if(selectedPartType == ModifyPartController.SelectedPartType.INHOUSE){
+        if(this.selectedPartType == ModifyPartController.SelectedPartType.INHOUSE){
             int newPartMachineId;
 
             try{
@@ -251,12 +275,12 @@ public class ModifyPartController implements Initializable {
             Inventory.updatePart(index, 
                     new InhousePart(newPartId, newPartName, newPartPrice, newPartInv, newPartMin, newPartMax, newPartMachineId));
             
-        } else if(selectedPartType == ModifyPartController.SelectedPartType.OUTSOURCED){
+        } else if(this.selectedPartType == ModifyPartController.SelectedPartType.OUTSOURCED){
             String newPartCompanyName = variableTextField.getText();
             if(newPartCompanyName.isEmpty()){
                 kylegreeninventorysystem.Error.showError(variableTextField, warningLabel, "Company Name Is Required.");
             } else{
-                int index = Inventory.getAllParts().indexOf(this.selectedPartType);
+                int index = Inventory.getAllParts().indexOf(this.selectedPart);
                 Inventory.updatePart(index, 
                     new OutsourcedPart(newPartId, newPartName, newPartPrice, newPartInv, newPartMin, newPartMax, newPartCompanyName));
             }
